@@ -36,6 +36,9 @@ class VideoPlayerViewModel: ObservableObject {
     
     func onDisappear() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        players.forEach { player in
+            player.value.pause()
+        }
     }
     
     func updatePlayers() {
@@ -49,8 +52,6 @@ class VideoPlayerViewModel: ObservableObject {
     func startPlayer(at index: Int) {
         if let videoUrl = videos[index].videoUrl {
             players[index] = AVPlayer(url: videoUrl)
-            players[index]?.allowsExternalPlayback = false
-            players[index]?.audiovisualBackgroundPlaybackPolicy = .pauses
             setupProgressObserver()
             players[index]?.play()
             players[index]?.isMuted = isMuted
