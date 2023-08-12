@@ -7,13 +7,14 @@ class VideoPlayerViewModel: ObservableObject {
     
     @Published var videos: [VideoInfo]
     @Published var currentVideoIndex: Int
-    @Published var players: [AVPlayer?]
+    @Published var players: [Int: AVPlayer]
     @Published var currentVideoProgress: Float = 0.0
     @Published var blockVideoPlayback: Bool = false
     @Published var showControls: Bool = false
     @Published var isMuted: Bool = false
     
     private var timeObservers: [Int: Any] = [:]
+    var previousVideoIndex: Int?
     
     init(
         coordinator: VideosCoordinator,
@@ -22,7 +23,7 @@ class VideoPlayerViewModel: ObservableObject {
     ) {
         self.coordinator = coordinator
         self.videos = videos
-        self.players = [AVPlayer](repeating: .init(), count: videos.count)
+        self.players = [:]
         self.currentVideoIndex = selectedVideo
     }
     
@@ -37,9 +38,19 @@ class VideoPlayerViewModel: ObservableObject {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
     
+    func updatePlayers() {
+        if let previousVideoIndex = previousVideoIndex {
+            stopPlayer(at: previousVideoIndex)
+        }
+        startPlayer(at: currentVideoIndex)
+        previousVideoIndex = currentVideoIndex
+    }
+    
     func startPlayer(at index: Int) {
         if let videoUrl = videos[index].videoUrl {
             players[index] = AVPlayer(url: videoUrl)
+            players[index]?.allowsExternalPlayback = false
+            players[index]?.audiovisualBackgroundPlaybackPolicy = .pauses
             setupProgressObserver()
             players[index]?.play()
             players[index]?.isMuted = isMuted

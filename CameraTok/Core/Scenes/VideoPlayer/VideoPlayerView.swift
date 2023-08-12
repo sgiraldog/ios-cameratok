@@ -26,9 +26,9 @@ struct VideoPlayerView: View {
     
     func pagedVideoList(proxy: GeometryProxy) -> some View {
         TabView(selection: $viewModel.currentVideoIndex) {
-            ForEach(Array(viewModel.players.enumerated()), id: \.offset) { index, player in
+            ForEach(Array(viewModel.videos.indices), id: \.self) { index in
                 videoPlayer(
-                    player: player,
+                    player: viewModel.players[index],
                     index: index
                 )
             }
@@ -50,17 +50,15 @@ struct VideoPlayerView: View {
         .tabViewStyle(
             PageTabViewStyle(indexDisplayMode: .never)
         )
+        .onAppear {
+            viewModel.updatePlayers()
+        }
     }
     
     func videoPlayer(player: AVPlayer?, index: Int) -> some View  {
         ZStack(alignment: .bottomTrailing) {
             VideoPlayer(player: player)
-                .onAppear {
-                    viewModel.startPlayer(at: index)
-                }
-                .onDisappear {
-                    viewModel.stopPlayer(at: index)
-                }
+            
             Color.gray
                 .opacity(Constants.videoOverlayOpacity)
                 .frame(
@@ -107,6 +105,9 @@ struct VideoPlayerView: View {
                 Constants.videoInteractionSpacing
             )
         }
+        .onChange(of: viewModel.currentVideoIndex, perform: { _ in
+            viewModel.updatePlayers()
+        })
     }
 }
 
