@@ -92,7 +92,7 @@ Useful extensions to translate PHAssets into thumbnail images and video urls tha
 ### Model
 Data abstractions to model entities that were going to be used all over the app.
 
-### UI
+## UI
 ```
 ├── Buttons
 ├── Styles
