@@ -1,0 +1,11 @@
+strings:
+  inputs: CameraTok/Resources/Localizable.strings
+  outputs:
+    - templateName: structured-swift5
+      output: CameraTok/Generated/Strings.swift
+xcassets:
+  inputs:
+    - CameraTok/Resources/Assets.xcassets
+  outputs:
+    - templateName: swift5
+      output: CameraTok/Generated/Assets.swift

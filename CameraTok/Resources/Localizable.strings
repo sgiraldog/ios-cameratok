@@ -1,0 +1,9 @@
+// MARK: Intro
+"intro.title" = "Welcome to CameraTok!";
+"intro.body" = "In this app you will be able to see and interact with the awesome videos that you have on the gallery. Note: The app requires permission to see the gallery";
+"intro.button.title" = "Get Started!";
+"intro.permissionDenied.label" = "Permission to access gallery was denied";
+
+// MARK: Gallery
+"gallery.picker.label" = "Videos before:";
+"gallery.noVideos.label" = "There are no videos, please try with another date.";
